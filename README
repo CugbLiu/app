@@ -1,0 +1,24 @@
+# 由于存储的用户信息采用mongodb，且为了数据备份，采用了mongodb的复制集
+# 在docker-compose.yml使用mongo:rs镜像配置，三个节点在同一个服务器中
+# mongo:rs镜像的复制集名称是rs0
+# 所以在启动docker-compose up后，需要初始化mongodb的镜像复制集，执行脚本文件./after-docker_compose_up.sh即可，如果需要更换服务器，则需要修改脚本文件中的ip信息
+
+# app应用中的数据信息应该来自mongodb的shard分片，这些配置放置在另一个服务器上，
+# 所以启动时需要在settings.py修改data_mongo_url,data_mongo_port的信息，
+# 如果mongos使用的复制集，那么应该也在app下的__init__.py中下修改mongodb的数据库连接方式，采用MongoReplicaSetClient的连接。
+
+# 启动前还需要在settings.py中修改file_url的地址，这个地址表示的前端html代码的服务器的ip地址
+
+# 启动前需要更改settings.py中confirm_ip地址，这个地址应该配置成app应用程序启动的ip
+
+
+# 提示：最后再部署的时候不要将任何信息挂载在~目录。
+# 端口映射与挂载信息
+	# app 5001:5000
+		# ~/app:/app   代码存放位置
+	# mongodb 27020:27017
+		# ~/app_data/data27020:/mongodb/data  数据库数据存放位置
+	# mongodb2 27021:27017
+		# ~/app_data/data27022:/mongodb/data  数据库数据存放位置
+	# mongodb3 27022:27017
+		# ~/app_data/data270202:/mongodb/data 数据库数据存放位置

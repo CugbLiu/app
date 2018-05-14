@@ -1,0 +1,38 @@
+version: '3'
+services: 
+  app:
+    image: app
+    depends_on:
+      - mongodb
+    links:
+      - mongodb:db
+    ports:
+      - "5001:5000"
+    volumes:
+      - ~/app:/app
+    environment:
+      - DB_NAME=db
+    command: python /app/manage.py runserver --host 0.0.0.0 --port 5000
+  mongodb:
+    image: mongo:rs
+    ports:
+      - "27020:27017"
+    volumes:
+      - ~/app_data/data27020:/mongodb/data
+  mongodb2:
+    image: mongo:rs
+    ports:
+      - "27021:27017"
+    volumes:
+      - ~/app_data/data27021:/mongodb/data
+  monogodb3:
+    image: mongo:rs
+    ports:
+      - "27022:27017"
+    volumes:
+      - ~/app_data/data27022:/mongodb/data
+  
+
+
+    
+
